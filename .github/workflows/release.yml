@@ -26,13 +26,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up MATLAB
-        uses: matlab-actions/setup-matlab@v1
+        uses: matlab-actions/setup-matlab@v2
         with:
           release: ${{ matrix.MATLABVersion }}
 
       # Runs all tests in the project.  Put results in a version specific subdirectory
       - name: Run tests
-        uses: matlab-actions/run-command@v1
+        uses: matlab-actions/run-command@v2
         with:
           command: addpath("buildUtilities"),testToolbox('ReportSubdirectory',"${{ matrix.MATLABVersion }}")     
 
@@ -65,7 +65,9 @@ jobs:
             ref: refs/heads/main
     
       - name: Set up MATLAB
-        uses: matlab-actions/setup-matlab@v1
+        uses: matlab-actions/setup-matlab@v2
+        with:
+          cache: true
 
       # Copy all the reports down into the container
       - uses: actions/download-artifact@v3
@@ -75,7 +77,7 @@ jobs:
 
       # Generate the JSON for the releases tested badge
       - name: Generate tested with badge
-        uses: matlab-actions/run-command@v1
+        uses: matlab-actions/run-command@v2
         with:
           command: addpath("buildUtilities"),badgesforToolbox()     
           
@@ -88,7 +90,7 @@ jobs:
 
       # Package the MLTBX
       - name: Package Toolbox
-        uses: matlab-actions/run-command@v1
+        uses: matlab-actions/run-command@v2
         with:
           command: addpath("buildUtilities"),packageToolbox("specific","${{  github.ref_name }}")     
 
